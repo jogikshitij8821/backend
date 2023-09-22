@@ -151,9 +151,10 @@ app.get('/api/posts', async (req, res) => {
 });
 app.post('/api/posts/:postId/like', async (req, res) => {
   const postId = req.params.postId;
+  console.log(postId);
   try {
     const post = await Post.findById(postId);
-
+console.log(post);
 
     if (!post) {
       return res.status(404).json({ message: 'Blog post not found' });
