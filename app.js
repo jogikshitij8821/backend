@@ -38,7 +38,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 passport.use(new GoogleStrategy({
-    clientID: '166868863171-3jc87rbv266kcefu4f2jqjlhsqrbfm1p.apps.googleusercontent.com',
+    clientID: '301665309086-m4q5del241f1j6b22vh10mde9e8tt4m4.apps.googleusercontent.',
     clientSecret: "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",
     callbackURL: "https://frontend-x0qa.onrender.com/auth/google/callback"
   },
@@ -147,7 +147,7 @@ app.post('/api/posts/:postId/like', async (req, res) => {
   app.get(
     '/auth/google/callback',
     passport.authenticate('google', {
-      successRedirect: '/mainpage', 
+      successRedirect: '/MainPage', 
       failureRedirect: '/login', 
     })
   );
