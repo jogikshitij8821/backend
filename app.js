@@ -4,6 +4,23 @@ const User = require('./user');
 const Post = require('./post');
 const Comment = require('./comment');
 // const bcrypt = require('bcrypt');
+const { google } = require('googleapis');
+const OAuth2 = google.auth.OAuth2;
+
+const oauth2Client = new OAuth2(
+  'http://301665309086-m4q5del241f1j6b22vh10mde9e8tt4m4.apps.googleusercontent.com',
+  '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',
+  'Yhttps://frontend-wzjs.onrender.com' // This should match one of the authorized redirect URIs in your Google Cloud Console project
+);
+
+// Generate the authorization URL
+const authUrl = oauth2Client.generateAuthUrl({
+  access_type: 'offline', // for refresh token
+  scope: 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile', // the desired Google API scopes
+});
+
+console.log('Authorization URL:', authUrl);
+
 
 
 
@@ -12,6 +29,21 @@ const Comment = require('./comment');
  const bodyparser=require('body-parser');
 
 const app = express();
+
+const CLIENT_ID = '9eff6a9c7c6c86b8523f';
+const REDIRECT_URI = 'https://frontend-wzjs.onrender.com/callback/github'; 
+const SCOPES = 'user:email'; 
+
+
+
+
+app.get('/github-auth', (req, res) => {
+  
+  const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=${SCOPES}`;
+
+
+  res.redirect(githubAuthUrl);
+});
 
 const PORT = process.env.PORT || 4000;
  const cors = require('cors');
@@ -102,7 +134,7 @@ app.post('/api/login',async (req,res)=>{
   const{username,password}=req.body;
   console.log(username,password);
   const user = await User.findOne({username,password});
-  // console.log(user);
+   console.log(user);
   if(user){
     res.status(200).json(user);
   }else{
