@@ -11,6 +11,7 @@ const session = require('express-session');
 
 
 
+
   const mongoose = require('mongoose');
 
  const bodyparser=require('body-parser');
@@ -24,7 +25,7 @@ const PORT = process.env.PORT || 4000;
  
 connectDB()
 const crypto = require('crypto');
-
+var userProfile;
 
 const sessionSecret = crypto.randomBytes(32).toString('hex');
 app.use(session({
@@ -40,17 +41,14 @@ app.use(passport.session());
 passport.use(new GoogleStrategy({
     clientID: '301665309086-m4q5del241f1j6b22vh10mde9e8tt4m4.apps.googleusercontent.com',
     clientSecret: "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",
-    callbackURL: "https://frontend-wzjs.onrender.com/auth/google/callback"
+    callbackURL: "https://backend-x9r5.onrender.com/auth/google/callback"
   },
-  (accessToken, refreshToken, profile, done) => {
-   
-    if (error) {
-      return done(error);
-    }
-    return done(null, user);
-  }
-)
-);
+  function(accessToken, refreshToken, profile, done) {
+    userProfile=profile;
+    return done(null, userProfile);
+}
+));
+
 passport.serializeUser((user, done) => {
   done(null, user);
 });
@@ -144,13 +142,19 @@ app.post('/api/posts/:postId/like', async (req, res) => {
 
   app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
-  app.get(
-    '/auth/google/callback',
-    passport.authenticate('google', {
-      successRedirect: '/MainPage', 
-      failureRedirect: '/', 
-    })
-  );
+  // app.get(
+  //   '/auth/google/callback',
+  //   passport.authenticate('google', {
+  //     successRedirect: '/MainPage', 
+  //     failureRedirect: '/error', 
+  //   })
+  // );
+  app.get('/auth/google/callback', 
+  passport.authenticate('google', { failureRedirect: '/error' }),
+  function(req, res) {
+    // Successful authentication, redirect success.
+    res.send(userProfile);
+  });
 
 
 
