@@ -138,7 +138,10 @@ app.post('/api/posts/:postId/like', async (req, res) => {
   }
 });
 
-
+app.get('/MainPage', (req, res) => {
+  // You can render your homepage HTML or send a response as needed
+  res.send('Welcome to the homepage!');
+});
 
   app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
