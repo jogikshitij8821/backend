@@ -156,7 +156,7 @@ app.get('/MainPage', (req, res) => {
   passport.authenticate('google', { failureRedirect: '/error' }),
   function(req, res) {
     // Successful authentication, redirect success.
-    res.send(userProfile);
+    res.redirect('/MainPage');
   });
 
 
